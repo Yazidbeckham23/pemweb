@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hitung Biaya Parkir</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="time"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Hitung Biaya Parkir</h2>
+    <label for="jamMasuk">Jam Masuk:</label>
+    <input type="time" id="jamMasuk">
+
+    <label for="jamKeluar">Jam Keluar:</label>
+    <input type="time" id="jamKeluar">
+
+    <button onclick="hitungBiaya()">Hitung Biaya</button>
+
+    <h3 id="hasil"></h3>
+</div>
+
+<script>
+    function hitungBiaya() {
+        const jamMasuk = document.getElementById('jamMasuk').value;
+        const jamKeluar = document.getElementById('jamKeluar').value;
+
+        if (!jamMasuk || !jamKeluar) {
+            alert("Silakan masukkan jam masuk dan jam keluar.");
+            return;
+        }
+
+        const [jamM, menitM] = jamMasuk.split(':').map(Number);
+        const [jamK, menitK] = jamKeluar.split(':').map(Number);
+
+        const totalMenitMasuk = jamM * 60 + menitM;
+        const totalMenitKeluar = jamK * 60 + menitK;
+
+        let durasiParkir = totalMenitKeluar - totalMenitMasuk;
+
+        if (durasiParkir < 0) {
+            alert("Jam keluar tidak boleh lebih awal dari jam masuk.");
+            return;
+        }
+
+        // Menghitung durasi dalam jam
+        const durasiJam = Math.ceil(durasiParkir / 60);
+        
+        let biaya = 0;
+
+        if (durasiJam <= 2) {
+            biaya = 3000; // Biaya untuk 2 jam pertama
+        } else {
+            biaya = 3000 + (durasiJam - 2) * 1000; // Tambahan per jam setelah 2 jam
+        }
+
+        document.getElementById('hasil').innerText = `Biaya Parkir: Rp ${biaya}`;
+    }
+</script>
+
+</body>
+</html>
